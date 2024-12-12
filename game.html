@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Flip Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Coin Flip Game</h1>
+        
+        <div>
+            <h2>Your balance: <span id="balance">0</span> UAH</h2>
+        </div>
+
+        <form id="bet-form">
+            <label for="bet-amount">Bet amount:</label>
+            <input type="number" id="bet-amount" required min="1">
+            <div class="btn-group">
+                <button type="button" onclick="playGame()">Play!</button>
+                <button type="button" onclick="exitGame()">Exit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let userEmail = localStorage.getItem('userEmail'); // Get user email from localStorage
+
+        // Get balance
+        async function getBalance() {
+            const token = localStorage.getItem('token'); // Save token after login to localStorage
+            if (!token) {
+                alert('You are not logged in!');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:5000/balance', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('balance').innerText = `${data.balance}`;
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Get balance flow error');
+            }
+        }
+
+        // Play the game
+        async function playGame() {
+            const betAmount = document.getElementById('bet-amount').value;
+            if (betAmount > 0){
+                try {
+                const res = await fetch('http://localhost:5000/play', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: JSON.stringify({ bet: betAmount })
+                });
+
+                const data = await res.json();
+                alert(res.ok ? data.message : data.error);
+                getBalance(); // refresh balance
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error appears !!!');
+                }
+
+            } else {
+                alert('Select other amount.');
+            }
+        }
+
+        // Exit game
+        async function exitGame() {
+            try {
+                const res = await fetch('http://localhost:5000/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (res.ok) {
+                    // Remove token
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Logout error');
+                }
+            } catch (error) {
+                console.error('Exit error:', error);
+                alert('Exit fail. Close browser.');
+            }
+        }
+
+        // Get balance on page load
+        window.onload = getBalance;
+    </script>
+</body>
+</html>

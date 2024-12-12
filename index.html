@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="us">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Flip Game - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Coin Flip Game</h1>
+        <h2>Login or Register:</h2>
+        <form id="auth-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="example@email.com" required>
+            
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" placeholder="Введіть пароль" required>
+            
+            <div class="btn-group">
+                <button type="button" onclick="register()">Register</button>
+                <button type="button" onclick="login()">Login</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // User register
+        async function register() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('http://localhost:5000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+                alert(res.ok ? data.message : data.error);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Login error!');
+            }
+        }
+
+        // User login
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('http://localhost:5000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('token', data.token); // Token save
+                    window.location.href = 'game.html'; 
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Login error!');
+            }
+        }
+    </script>
+</body>
+</html>
