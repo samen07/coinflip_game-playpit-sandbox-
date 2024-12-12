@@ -24,6 +24,13 @@
         </form>
     </div>
 
+    <!-- Custom alert -->
+    <div class="custom-alert-overlay" id="alert-overlay"></div>
+    <div class="custom-alert" id="custom-alert">
+        <h3 id="alert-message">Alert MSG</h3>
+        <button onclick="closeCustomAlert()">Close</button>
+    </div>
+
     <script>
         // User register
         async function register() {
@@ -38,10 +45,13 @@
                 });
 
                 const data = await res.json();
-                alert(res.ok ? data.message : data.error);
+                //alert(res.ok ? data.message : data.error);
+                showCustomAlert(res.ok ? data.message : data.error);
+
             } catch (error) {
                 console.error('Error:', error);
-                alert('Login error!');
+                //alert('Login error!');
+                showCustomAlert('Login error!');
             }
         }
 
@@ -62,12 +72,32 @@
                     localStorage.setItem('token', data.token); // Token save
                     window.location.href = 'game.html'; 
                 } else {
-                    alert(data.error);
+                    //alert(data.error);
+                    showCustomAlert(data.error);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Login error!');
+                //alert('Login error!');
+                showCustomAlert('Login error!');
             }
+        }
+
+        function showCustomAlert(message) {
+            const alertMessage = document.getElementById('alert-message');
+            const alertOverlay = document.getElementById('alert-overlay');
+            const customAlert = document.getElementById('custom-alert');
+
+            alertMessage.textContent = message;
+            alertOverlay.style.display = 'block';
+            customAlert.style.display = 'block';
+        }
+
+        function closeCustomAlert() {
+            const alertOverlay = document.getElementById('alert-overlay');
+            const customAlert = document.getElementById('custom-alert');
+
+            alertOverlay.style.display = 'none';
+            customAlert.style.display = 'none';
         }
     </script>
 </body>
