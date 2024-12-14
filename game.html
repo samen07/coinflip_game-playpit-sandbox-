@@ -14,14 +14,27 @@
             <h2>Your balance: <span id="balance">0</span> UAH</h2>
         </div>
 
+
         <form id="bet-form">
             <label for="bet-amount">Bet amount:</label>
             <input type="number" id="bet-amount" required min="1">
+
+            <label for="color-choice">Choose color:</label>
+            <select id="color-choice" required>
+                <option value="unselected">Chose bet place</option>
+                <option value="black">Black x2</option>
+                <option value="red">Red x2</option>
+                <option value="zero">Zero x36</option>
+            </select>
+
+            <br><br>
+
             <div class="btn-group">
                 <button type="button" onclick="playGame()">Play!</button>
                 <button type="button" onclick="exitGame()">Exit</button>
             </div>
         </form>
+
     </div>
 
     <!-- Custom alert -->
@@ -67,26 +80,31 @@
         // Play the game
         async function playGame() {
             const betAmount = document.getElementById('bet-amount').value;
-            if (betAmount > 0){
-                try {
-                const res = await fetch('http://localhost:5000/play', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                    body: JSON.stringify({ bet: betAmount })
-                });
+            const colorChoice = document.getElementById('color-choice').value;
 
-                const data = await res.json();
-                showCustomAlert(res.ok ? data.message : data.error);
-                getBalance(); // refresh balance
+            if (betAmount > 0 && colorChoice != 'unselected') {
+                try {
+                    const res = await fetch('http://localhost:5000/play', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ bet: betAmount, choice: colorChoice })
+                    });
+
+                    const data = await res.json();
+                    showCustomAlert(data.message);
+                    getBalance();
                 } catch (error) {
                     console.error('Error:', error);
-                    showCustomAlert('Error appears !!!');
+                    showCustomAlert('Game error!');
                 }
-
             } else {
-                showCustomAlert('Select other amount.');
+                showCustomAlert('Please, enter right bet amount and colour choice');
             }
         }
+
 
         // Exit game
         async function exitGame() {
