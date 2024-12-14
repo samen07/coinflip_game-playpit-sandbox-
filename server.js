@@ -81,7 +81,7 @@ app.get('/balance', async (req, res) => {
 // Add to user balance
 // Withdraw from user balance
 // Game
-app.post('/play', async (req, res) => {
+app.post('/play_coinflip', async (req, res) => {
     const token = req.headers['authorization'].split(' ')[1];
     const decoded = jwt.verify(token, 'your_secret_key');
 
@@ -106,6 +106,49 @@ app.post('/play', async (req, res) => {
         res.json({ message: 'You lose!', newBalance: user.balance });
     }
 });
+
+app.post('/play', async (req, res) => {
+    const token = req.headers['authorization'].split(' ')[1];
+    const decoded = jwt.verify(token, 'your_secret_key');
+    const user = await User.findById(decoded.id);
+
+    const { bet, choice } = req.body; // choice = "black", "red" або "zero"
+
+    if (!user || user.balance < bet) {
+        return res.status(400).json({ error: "Not enough money" });
+    }
+
+    const spinResult = Math.floor(Math.random() * 37); // number from 0 to 36
+    let resultColor;
+
+    if (spinResult === 0) {
+        resultColor = "zero";
+    } else if ([2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35].includes(spinResult)) {
+        resultColor = "black";
+    } else {
+        resultColor = "red";
+    }
+
+    let message;
+    if (choice === resultColor) {
+        if (resultColor === "zero") {
+            user.balance += Number(bet) * 36;
+            await user.save();
+            message = `Zero! You wom ${bet * 36} UAH!`;
+        } else {
+            user.balance += Number(bet);
+            await user.save();
+            message = `You won ${bet * 2} UAH!`;
+        }
+    } else {
+        user.balance -= Number(bet);
+        await user.save();
+        message = `You lose! Roulette stopped on ${spinResult} (${resultColor}).`;
+    }
+
+    res.json({ message, balance: user.balance });
+});
+
 
 // Start of server
 app.listen(PORT, () => {
