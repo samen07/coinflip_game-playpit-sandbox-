@@ -138,7 +138,7 @@ app.post('/play', async (req, res) => {
         } else {
             user.balance += Number(bet);
             await user.save();
-            message = `You won ${bet * 2} UAH!`;
+            message = `You won ${bet} UAH!`;
         }
     } else {
         user.balance -= Number(bet);
