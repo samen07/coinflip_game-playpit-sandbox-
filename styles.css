@@ -12,7 +12,7 @@ body {
 
 h1 {
     font-size: 2.5rem;
-    color: #fff;
+    color: #000000;
     margin-bottom: 20px;
 }
 
@@ -184,4 +184,28 @@ button:hover {
 
 .color-circle.green {
     background: green;
+}
+
+/* add money btm */
+
+.balance-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.add-money-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background: #0097e6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.add-money-btn:hover {
+    background: #007bb5;
 }
