@@ -8,12 +8,12 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>Coin Flip Game</h1>
-        
-        <div>
-            <h2>Your balance: <span id="balance">0</span> UAH</h2>
-        </div>
 
+
+        <div class="balance-container">
+            <h3>Your balance: <span id="balance">0</span> $</h3>
+            <button type="button" class="add-money-btn" onclick="addMoney()">Add money</button>
+        </div>
 
         <form id="bet-form">
             <label for="bet-amount">Bet amount:</label>
@@ -172,6 +172,10 @@
 
             // Save hidden choice
             document.getElementById('color-choice').value = choice;
+        }
+
+        function addMoney() {
+            window.location.href = 'add-money.html';
         }
 
     </script>

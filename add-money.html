@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Money</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="form-container">
+    <h2>Add money page</h2>
+    <h4>Please support Ukraine, and add money to your game account for free using this page!</h4>
+    <br>
+    <h5>If you need assist in search whom to donate, you can go to:</h5>
+    <a href="https://savelife.in.ua/">Come back alive</a> is non-governmental organisation fund<br>
+    <a href="https://u24.gov.ua/">United 24</a> one-click donations to Ukraine from anywhere<br>
+    <a href="https://www.socialdrone.com.ua/">SDUA</a> direct donation to SocialDroneUa for FPV build<br>
+
+    <form id="add-money-form">
+        <label for="amount">Enter amount:</label>
+        <input type="number" id="amount" required min="1" placeholder="example, 100 UAH">
+        <br>
+
+        <div class="btn-group">
+            <button type="button" onclick="addMoney()">Add</button>
+            <button type="button" onclick="goBack()">Cancel</button>
+        </div>
+    </form>
+
+    <div class="custom-alert-overlay" id="alert-overlay"></div>
+    <div class="custom-alert" id="custom-alert">
+        <h3 id="alert-message">Alert MSG</h3>
+        <button onclick="closeCustomAlert()">Close</button>
+    </div>
+</div>
+
+<script>
+    async function addMoney() {
+        const amount = document.getElementById('amount').value;
+        if (amount > 0) {
+            try {
+                const res = await fetch('http://localhost:5000/add-money', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ amount: amount })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    showCustomAlert(data.message || 'Money added successfully!');
+                } else {
+                    const errorData = await res.json();
+                    showCustomAlert(errorData.error || 'Error appears!');
+                }
+            } catch (error) {
+                showCustomAlert('Server error, try later:' + error);
+            }
+        } else {
+            showCustomAlert('Enter valid amount.');
+        }
+    }
+
+    function goBack() {
+        window.location.href = 'game.html';
+    }
+
+    function closeCustomAlert() {
+        const alertOverlay = document.getElementById('alert-overlay');
+        const customAlert = document.getElementById('custom-alert');
+
+        alertOverlay.style.display = 'none';
+        customAlert.style.display = 'none';
+    }
+
+    function showCustomAlert(message) {
+        const alertMessage = document.getElementById('alert-message');
+        const alertOverlay = document.getElementById('alert-overlay');
+        const customAlert = document.getElementById('custom-alert');
+
+        alertMessage.textContent = message;
+        alertOverlay.style.display = 'block';
+        customAlert.style.display = 'block';
+    }
+</script>
+</body>
+</html>

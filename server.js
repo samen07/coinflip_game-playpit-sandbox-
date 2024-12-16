@@ -81,32 +81,6 @@ app.get('/balance', async (req, res) => {
 // Add to user balance
 // Withdraw from user balance
 // Game
-app.post('/play_coinflip', async (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    const decoded = jwt.verify(token, 'your_secret_key');
-
-    const user = await User.findById(decoded.id);
-    const bet = Number(req.body.bet);
-
-    if (bet > user.balance) {
-        return res.status(400).json({ error: 'Not enough money' });
-    }
-
-    // Coinflip game logic
-    const result = Math.random() < 0.5 ? 'win' : 'lose'; // Random result
-
-    if (result === 'win') {
-        user.balance = Number(user.balance) + Number(bet); //win
-        //user.balance += bet;
-        await user.save();
-        res.json({ message: 'You win!', newBalance: user.balance });
-    } else {
-        user.balance = Number(user.balance) - Number(bet); //lose
-        await user.save();
-        res.json({ message: 'You lose!', newBalance: user.balance });
-    }
-});
-
 app.post('/play', async (req, res) => {
     const token = req.headers['authorization'].split(' ')[1];
     const decoded = jwt.verify(token, 'your_secret_key');
@@ -149,6 +123,26 @@ app.post('/play', async (req, res) => {
     res.json({ message, balance: user.balance });
 });
 
+//add money
+app.post('/add-money', async (req, res) => {
+        const token = req.headers['authorization'].split(' ')[1];
+        const decoded = jwt.verify(token, 'your_secret_key');
+        const user = await User.findById(decoded.id);
+
+        const { amount } = req.body;
+        if (!amount || isNaN(amount) || Number(amount) <= 0) {
+            return res.status(400).json({ error: 'Invalid amount' });
+        }
+
+        user.balance += Number(amount);
+        await user.save();
+
+        return res.status(200).json({
+            message: `Balance successfully added: ${amount} UAH!`,
+            new_balance: user.balance
+        });
+    });
+//return res.status(400).json({ error: 'Token not received' });
 
 // Start of server
 app.listen(PORT, () => {
