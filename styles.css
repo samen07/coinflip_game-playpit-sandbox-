@@ -1,4 +1,8 @@
 /* Main style */
+@view-transition {
+    navigation: auto;
+}
+
 body {
     font-family: Arial, sans-serif;
     background: linear-gradient(to right, #133526, #416245);
