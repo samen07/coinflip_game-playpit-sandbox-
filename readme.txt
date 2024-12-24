@@ -14,4 +14,9 @@ using powershell, run
 "npm install -g http-server"
 "http-server ."
 "npm install cors"
+>>>>>>Autotests>>>>>>
+"npm install axios" module for automation test
+"npm install --save-dev @types/axios" for automation test
+"npm install --save-dev jest @types/jest ts-jest" for automation test
+<<<<<<Autotests<<<<<<
 now, should be available on local PC http://localhost:8080
