@@ -26,13 +26,26 @@ const cors = require('cors');
 app.use(cors());
 
 // Register
+function validateUserData(email, password) {
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    // I hate regular expressions :)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return trimmedEmail.length > 0 && trimmedPassword.length > 0 && emailRegex.test(trimmedEmail);
+}
+
 app.post('/register', async (req, res) => {
     const { email, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ email, password: hashedPassword });
+    if (!validateUserData(email, password)) {
+        return res.status(400).json({ error: 'Email and Password are required' });
+    }
 
     try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ email, password: hashedPassword });
         await user.save();
         res.status(201).json({ message: 'User registered, you can Login now!' });
     } catch (error) {
