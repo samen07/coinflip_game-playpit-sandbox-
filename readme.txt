@@ -18,5 +18,6 @@ using powershell, run
 "npm install axios" module for automation test
 "npm install --save-dev @types/axios" for automation test
 "npm install --save-dev jest @types/jest ts-jest" for automation test
+"npm test" to run tests
 <<<<<<Autotests<<<<<<
 now, should be available on local PC http://localhost:8080
