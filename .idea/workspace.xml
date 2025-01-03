@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2894bae9-5c87-4457-b4c4-6067b5c217e3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/auth.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/auth.test.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +156,11 @@
       <workItem from="1735239455853" duration="57000" />
       <workItem from="1735240725682" duration="2572000" />
       <workItem from="1735307160396" duration="431000" />
-      <workItem from="1735485546043" duration="787000" />
+      <workItem from="1735485546043" duration="1158000" />
+      <workItem from="1735566141332" duration="3731000" />
+      <workItem from="1735572883113" duration="2431000" />
+      <workItem from="1735575876326" duration="4331000" />
+      <workItem from="1735651897199" duration="3244000" />
     </task>
     <servers />
   </component>

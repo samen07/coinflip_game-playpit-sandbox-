@@ -4,10 +4,20 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-const PORT = 5000;
+
+require('dotenv').config();
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/coinflip', { useNewUrlParser: true, useUnifiedTopology: true });
+const isDocker = process.env.DOCKER || false; // Using env var
+const PORT = isDocker ? 3000 : 5000;
+
+const mongoURI = isDocker
+    ? 'const mongoURI = process.env.MONGODB_URI;'
+    : 'mongodb://localhost:27017/coinflip_game'; // For local enc
+mongoose
+    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log(`Connected to MongoDB at ${mongoURI}`))
+    .catch((err) => console.error('Error connecting to MongoDB:', err));
 
 // DB user schema
 const userSchema = new mongoose.Schema({

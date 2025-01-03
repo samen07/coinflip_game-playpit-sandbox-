@@ -4,8 +4,10 @@ import { MongoClient } from 'mongodb';
 describe("Authorization Tests", () => {
   const BASE_URL = "http://localhost:5000";
   const MONGO_URI = "mongodb://localhost:27017";
-  const DATABASE_NAME = "coinflip";
+  const DATABASE_NAME = "coinflip_game";
   const DB_COLLECTION_NAME = "users";
+
+  const testUserEmail = "test@test.com";
 
   let mongoClient: MongoClient;
 
@@ -15,7 +17,7 @@ describe("Authorization Tests", () => {
     const db = mongoClient.db(DATABASE_NAME);
     const usersCollection = db.collection(DB_COLLECTION_NAME);
 
-    await usersCollection.deleteOne({ email: "test@example.com" }); //preconditions delete test user
+    await usersCollection.deleteOne({ email: testUserEmail }); //preconditions delete test user
   });
 
   afterAll(async () => {
@@ -24,7 +26,7 @@ describe("Authorization Tests", () => {
 
   it("should register a new user successfully", async () => {
     const response = await axios.post(`${BASE_URL}/register`, {
-      email: "test@example.com",
+      email: testUserEmail,
       password: "password123",
     });
 
@@ -34,7 +36,7 @@ describe("Authorization Tests", () => {
 
   it("should login successfully and return a token", async () => {
     const response = await axios.post(`${BASE_URL}/login`, {
-      email: "test@example.com",
+      email: testUserEmail,
       password: "password123",
     });
 
@@ -46,7 +48,7 @@ describe("Authorization Tests", () => {
     let errorResponse;
     try {
       await axios.post(`${BASE_URL}/login`, {
-        email: 'test@example.com',
+        email: testUserEmail,
         password: 'wrongpassword',
       });
     } catch (error: any) {
@@ -91,7 +93,7 @@ describe("Authorization Tests", () => {
   it("should fail with empty password field", async () => {
     try {
       await axios.post(`${BASE_URL}/login`, {
-        email: "test@example.com",
+        email: testUserEmail,
         password: "",
       });
     } catch (error: any) {
