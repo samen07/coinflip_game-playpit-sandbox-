@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2894bae9-5c87-4457-b4c4-6067b5c217e3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/index.page.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/tests/ui.test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jest.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tests/auth.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/auth.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/add-money.html" beforeDir="false" afterPath="$PROJECT_DIR$/add-money.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.html" beforeDir="false" afterPath="$PROJECT_DIR$/game.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/index.page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.page.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,6 +161,7 @@
       <workItem from="1735912266718" duration="1634000" />
       <workItem from="1735914888320" duration="10845000" />
       <workItem from="1735930113034" duration="145000" />
+      <workItem from="1735930468441" duration="1029000" />
     </task>
     <servers />
   </component>

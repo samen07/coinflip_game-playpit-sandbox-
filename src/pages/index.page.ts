@@ -11,7 +11,7 @@ export class IndexPage {
 
     async isIndexPageLoaded(): Promise<boolean> {
         try {
-            await this.authForm.waitFor({ state: 'visible', timeout: 60000 });
+            await this.authForm.waitFor({ state: 'visible', timeout: 5000 });
             return true;
         } catch (error) {
             return false;

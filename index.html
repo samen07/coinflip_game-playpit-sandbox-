@@ -8,98 +8,98 @@
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <div class="form-container">
-        <h1>Coin Flip Game</h1>
-        <h2>Login or Register:</h2>
-        <form id="auth-form">
-            <label for="email">Email:</label>
-            <input type="email" id="email" placeholder="example@email.com" required>
-            
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" placeholder="Enter password" required>
-            
-            <div class="btn-group">
-                <button type="button" onclick="register()">Register</button>
-                <button type="button" onclick="login()">Login</button>
-            </div>
-        </form>
-    </div>
+<div class="form-container" data-testid="form-container">
+    <h1 data-testid="title">Coin Flip Game</h1>
+    <h2 data-testid="subtitle">Login or Register:</h2>
+    <form id="auth-form" data-testid="auth-form">
+        <label for="email" data-testid="email-label">Email:</label>
+        <input type="email" id="email" placeholder="example@email.com" required data-testid="email-input">
 
-    <!-- Custom alert -->
-    <div class="custom-alert-overlay" id="alert-overlay"></div>
-    <div class="custom-alert" id="custom-alert">
-        <h3 id="alert-message">Alert MSG</h3>
-        <button onclick="closeCustomAlert()">Close</button>
-    </div>
+        <label for="password" data-testid="password-label">Пароль:</label>
+        <input type="password" id="password" placeholder="Enter password" required data-testid="password-input">
 
-    <script>
-        // User register
-        async function register() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        <div class="btn-group" data-testid="btn-group">
+            <button type="button" onclick="register()" data-testid="register-button">Register</button>
+            <button type="button" onclick="login()" data-testid="login-button">Login</button>
+        </div>
+    </form>
+</div>
 
-            try {
-                const res = await fetch('http://localhost:5000/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+<!-- Custom alert -->
+<div class="custom-alert-overlay" id="alert-overlay" data-testid="alert-overlay"></div>
+<div class="custom-alert" id="custom-alert" data-testid="custom-alert">
+    <h3 id="alert-message" data-testid="alert-message">Alert MSG</h3>
+    <button onclick="closeCustomAlert()" data-testid="alert-close-button">Close</button>
+</div>
 
-                const data = await res.json();
-                //alert(res.ok ? data.message : data.error);
-                showCustomAlert(res.ok ? data.message : data.error);
+<script>
+    // User register
+    async function register() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-            } catch (error) {
-                console.error('Error:', error);
-                //alert('Login error!');
-                showCustomAlert('Login error!');
+        try {
+            const res = await fetch('http://localhost:5000/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+            //alert(res.ok ? data.message : data.error);
+            showCustomAlert(res.ok ? data.message : data.error);
+
+        } catch (error) {
+            console.error('Error:', error);
+            //alert('Login error!');
+            showCustomAlert('Login error!');
+        }
+    }
+
+    // User login
+    async function login() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const res = await fetch('http://localhost:5000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('token', data.token); // Token save
+                window.location.href = 'game.html';
+            } else {
+                //alert(data.error);
+                showCustomAlert(data.error);
             }
+        } catch (error) {
+            console.error('Error:', error);
+            //alert('Login error!');
+            showCustomAlert('Login error!');
         }
+    }
 
-        // User login
-        async function login() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+    function showCustomAlert(message) {
+        const alertMessage = document.getElementById('alert-message');
+        const alertOverlay = document.getElementById('alert-overlay');
+        const customAlert = document.getElementById('custom-alert');
 
-            try {
-                const res = await fetch('http://localhost:5000/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+        alertMessage.textContent = message;
+        alertOverlay.style.display = 'block';
+        customAlert.style.display = 'block';
+    }
 
-                const data = await res.json();
-                if (res.ok) {
-                    localStorage.setItem('token', data.token); // Token save
-                    window.location.href = 'game.html'; 
-                } else {
-                    //alert(data.error);
-                    showCustomAlert(data.error);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                //alert('Login error!');
-                showCustomAlert('Login error!');
-            }
-        }
+    function closeCustomAlert() {
+        const alertOverlay = document.getElementById('alert-overlay');
+        const customAlert = document.getElementById('custom-alert');
 
-        function showCustomAlert(message) {
-            const alertMessage = document.getElementById('alert-message');
-            const alertOverlay = document.getElementById('alert-overlay');
-            const customAlert = document.getElementById('custom-alert');
-
-            alertMessage.textContent = message;
-            alertOverlay.style.display = 'block';
-            customAlert.style.display = 'block';
-        }
-
-        function closeCustomAlert() {
-            const alertOverlay = document.getElementById('alert-overlay');
-            const customAlert = document.getElementById('custom-alert');
-
-            alertOverlay.style.display = 'none';
-            customAlert.style.display = 'none';
-        }
-    </script>
+        alertOverlay.style.display = 'none';
+        customAlert.style.display = 'none';
+    }
+</script>
 </body>
 </html>
