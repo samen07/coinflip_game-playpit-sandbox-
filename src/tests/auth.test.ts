@@ -1,104 +1,104 @@
-import axios from 'axios';
+import { test, expect } from '@playwright/test';
 import { MongoClient } from 'mongodb';
 
-describe("Authorization Tests", () => {
-  const BASE_URL = "http://localhost:5000";
-  const MONGO_URI = "mongodb://localhost:27017";
-  const DATABASE_NAME = "coinflip_game";
-  const DB_COLLECTION_NAME = "users";
+const BASE_URL = 'http://localhost:5000';
+const MONGO_URI = 'mongodb://localhost:27017';
+const DATABASE_NAME = 'coinflip_game';
+const DB_COLLECTION_NAME = 'users';
 
-  const testUserEmail = "test@test.com";
+const testUserEmail = 'test@test.com';
 
+test.describe('Authorization Tests', () => {
   let mongoClient: MongoClient;
 
-  beforeAll(async () => {
+  test.beforeAll(async () => {
     mongoClient = new MongoClient(MONGO_URI);
     await mongoClient.connect();
     const db = mongoClient.db(DATABASE_NAME);
     const usersCollection = db.collection(DB_COLLECTION_NAME);
 
-    await usersCollection.deleteOne({ email: testUserEmail }); //preconditions delete test user
+    await usersCollection.deleteOne({ email: testUserEmail }); // Preconditions
   });
 
-  afterAll(async () => {
+  test.afterAll(async () => {
     await mongoClient.close();
   });
 
-  it("should register a new user successfully", async () => {
-    const response = await axios.post(`${BASE_URL}/register`, {
-      email: testUserEmail,
-      password: "password123",
+  test('001 Should register a new user successfully', async ({ request }) => {
+    const response = await request.post(`${BASE_URL}/register`, {
+      data: {
+        email: testUserEmail,
+        password: 'password123',
+      },
     });
 
-    expect(response.status).toBe(201);
-    expect(response.data.message).toBe("User registered, you can Login now!");
+    expect(response.status()).toBe(201);
+    const responseBody = await response.json();
+    expect(responseBody.message).toBe('User registered, you can Login now!');
   });
 
-  it("should login successfully and return a token", async () => {
-    const response = await axios.post(`${BASE_URL}/login`, {
-      email: testUserEmail,
-      password: "password123",
+  test('002 Should login successfully and return a token', async ({ request }) => {
+    const response = await request.post(`${BASE_URL}/login`, {
+      data: {
+        email: testUserEmail,
+        password: 'password123',
+      },
     });
 
-    expect(response.status).toBe(200);
-    expect(response.data.token).toBeDefined();
+    expect(response.status()).toBe(200);
+    const responseBody = await response.json();
+    expect(responseBody.token).toBeDefined();
   });
 
-  it('should fail login with incorrect password', async () => {
-    let errorResponse;
-    try {
-      await axios.post(`${BASE_URL}/login`, {
+  test('003 Should fail login with incorrect password', async ({ request }) => {
+    const response = await request.post(`${BASE_URL}/login`, {
+      data: {
         email: testUserEmail,
         password: 'wrongpassword',
-      });
-    } catch (error: any) {
-      errorResponse = error.response;
-    }
-    expect(errorResponse).toBeDefined();
-    expect(errorResponse.status).toBe(401);
-    expect(errorResponse.data.error).toBe('Wrong email or password.');
+      },
+    });
+
+    expect(response.status()).toBe(401);
+    const responseBody = await response.json();
+    expect(responseBody.error).toBe('Wrong email or password.');
   });
 
+  test('004 Should fail login with unavailable email', async ({ request }) => {
+    const response = await request.post(`${BASE_URL}/login`, {
+      data: {
+        email: 'unavailable@example.com',
+        password: 'password123',
+      },
+    });
 
-  it("should fail login with unavailable email", async () => {
-    let errorResponse;
-    try {
-      await axios.post(`${BASE_URL}/login`, {
-        email: "unavailable@example.com",
-        password: "password123",
-      });
-    } catch (error: any) {
-      errorResponse = error.response;
-    }
-    expect(errorResponse).toBeDefined();
-    expect(errorResponse.status).toBe(401);
-    expect(errorResponse.data.error).toBe("Wrong email or password.");
+    expect(response.status()).toBe(401);
+    const responseBody = await response.json();
+    expect(responseBody.error).toBe('Wrong email or password.');
   });
 
-  it("should fail with empty email field", async () => {
-    let errorResponse;
-    try {
-      await axios.post(`${BASE_URL}/login`, {
-        email: "",
-        password: "password123",
-      });
-    } catch (error: any) {
-      errorResponse = error.response;
-    }
-    expect(errorResponse).toBeDefined();
-    expect(errorResponse.status).toBe(401);
-    expect(errorResponse.data.error).toBe("Wrong email or password.");
+  test('005 Should fail with empty email field', async ({ request }) => {
+    const response = await request.post(`${BASE_URL}/login`, {
+      data: {
+        email: '',
+        password: 'password123',
+      },
+    });
+
+    expect(response.status()).toBe(401);
+    const responseBody = await response.json();
+    expect(responseBody.error).toBe('Wrong email or password.');
   });
 
-  it("should fail with empty password field", async () => {
-    try {
-      await axios.post(`${BASE_URL}/login`, {
+  test('006 Should fail with empty password field', async ({ request }) => {
+    const response = await request.post(`${BASE_URL}/login`, {
+      data: {
         email: testUserEmail,
-        password: "",
-      });
-    } catch (error: any) {
-      expect(error.response.status).toBe(401);
-      expect(error.response.data.error).toBe("Wrong email or password.");
-    }
+        password: '',
+      },
+    });
+
+    expect(response.status()).toBe(401);
+    const responseBody = await response.json();
+    expect(responseBody.error).toBe('Wrong email or password.');
   });
 });

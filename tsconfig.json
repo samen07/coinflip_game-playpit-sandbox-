@@ -1,21 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES2020",                 // Цільовий стандарт JavaScript
-    "module": "CommonJS",              // Використання модуля CommonJS
-    "strict": true,                      // Увімкнення суворого режиму
-    "esModuleInterop": true,            // Сумісність з модулями ES
-    "forceConsistentCasingInFileNames": true, // Суворий контроль регістру
-    "skipLibCheck": true,               // Пропустити перевірку типів бібліотек
-    "outDir": "./dist",               // Вихідна директорія для зібраних файлів
-    "rootDir": "./src",               // Коренева директорія проекту
-    "resolveJsonModule": true,          // Дозвіл імпорту JSON-файлів
-    "typeRoots": ["./node_modules/@types"], // Типи з npm
-    "lib": ["ES2020"],                // Використання сучасного стандарту бібліотек
-    "types": ["jest"],                // Автотести використовуючи jest
-    "moduleResolution": "node"        // Розв'язання модулів для Node.js
-
+    "target": "ES2020",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "resolveJsonModule": true,
+    "typeRoots": ["./node_modules/@types"],
+    "lib": ["ES2020"],
+    "types": ["playwright"],
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "@pages/*": ["src/pages/*"],
+      "@tests/*": ["src/tests/*"]
+    }
   },
-  "include": ["src/**/*"],            // Файли, що включаються до компіляції
-  "exclude": ["node_modules", "dist"] // Виключені файли
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
-
