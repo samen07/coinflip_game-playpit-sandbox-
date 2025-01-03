@@ -15,6 +15,7 @@ now, should be available on local PC http://localhost:8080
 >>>>>>Autotests>>>>>>
 "npm install axios" module for automation test
 "npm install --save-dev @types/axios" for automation test
-"npm install --save-dev jest @types/jest ts-jest" for automation test
-"npm test" to run tests
+"npm install playwright @playwright/test typescript ts-node --save-dev"
+"npx playwright install"
+"npm test" or "npx playwright test --headed --trace retain-on-failure" to run tests
 <<<<<<Autotests<<<<<<
