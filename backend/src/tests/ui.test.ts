@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { IndexPage } from '@pages/index.page';
+import { IndexPage } from '../pages/index.page';
 
 const TEST_ENV = 'http://localhost:8080';
 

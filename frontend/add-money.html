@@ -36,11 +36,12 @@
 </div>
 
 <script>
+    const backendUrl = 'http://localhost:5000';
     async function addMoney() {
         const amount = document.getElementById('amount').value;
         if (amount > 0) {
             try {
-                const res = await fetch('http://localhost:5000/add-money', {
+                const res = await fetch(backendUrl + '/add-money', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
