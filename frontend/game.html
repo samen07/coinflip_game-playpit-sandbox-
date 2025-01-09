@@ -54,6 +54,7 @@
 </div>
 
 <script>
+    const backendUrl = 'http://localhost:5000';
     let userEmail = localStorage.getItem('userEmail'); // Get user email from localStorage
 
     // Get balance
@@ -66,7 +67,7 @@
         }
 
         try {
-            const res = await fetch('http://localhost:5000/balance', {
+            const res = await fetch(backendUrl + '/balance', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -93,7 +94,7 @@
 
         if (betAmount > 0 && colorChoice != 'unselected') {
             try {
-                const res = await fetch('http://localhost:5000/play', {
+                const res = await fetch(backendUrl + '/play', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -117,7 +118,7 @@
     // Exit game
     async function exitGame() {
         try {
-            const res = await fetch('http://localhost:5000/logout', {
+            const res = await fetch(backendUrl + '/logout', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`

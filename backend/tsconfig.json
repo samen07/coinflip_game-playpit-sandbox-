@@ -9,7 +9,9 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
     "lib": ["ES2020"],
     "types": ["playwright"],
     "moduleResolution": "node",
@@ -20,6 +22,9 @@
       "@tests/*": ["src/tests/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "backend/src/**/*"
+  ],
+  "exclude": [
+    "../node_modules", "dist"]
 }

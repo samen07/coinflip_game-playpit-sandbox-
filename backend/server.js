@@ -9,15 +9,33 @@ require('dotenv').config();
 
 // MongoDB connection
 const isDocker = process.env.DOCKER || false; // Using env var
-const PORT = isDocker ? 3000 : 5000;
+const PORT = isDocker ? 5000 : 5000;
 
 const mongoURI = isDocker
-    ? 'const mongoURI = process.env.MONGODB_URI;'
-    : 'mongodb://localhost:27017/coinflip_game'; // For local enc
-mongoose
-    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log(`Connected to MongoDB at ${mongoURI}`))
-    .catch((err) => console.error('Error connecting to MongoDB:', err));
+    ? process.env.MONGODB_URI // Environment variable from Docker Compose
+    : 'mongodb://localhost:27017/coinflip_game';
+
+console.log(`MongoDB URI: ${mongoURI}`); // debug
+
+// Waiter for MongoDB connection
+const connectWithRetry = async (retries = 5, delay = 5000) => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            await mongoose.connect(mongoURI);
+            console.log(`Connected to MongoDB at ${mongoURI}`);
+            return;
+        } catch (err) {
+            console.error(`MongoDB connection error (attempt ${i + 1}/${retries}):`, err.message);
+            if (i === retries - 1) {
+                console.error('Failed to connect to MongoDB after multiple attempts. Exiting.');
+                process.exit(1); // Exit the process if unable to connect
+            }
+            await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retry
+        }
+    }
+};
+
+connectWithRetry();
 
 // DB user schema
 const userSchema = new mongoose.Schema({
@@ -111,10 +129,6 @@ app.post('/play', async (req, res) => {
 
     const { bet, choice } = req.body; // choice = "black", "red" або "zero"
 
-    if (!user || user.balance < bet) {
-        return res.status(400).json({ error: "Not enough money" });
-    }
-
     const spinResult = Math.floor(Math.random() * 37); // number from 0 to 36
     let resultColor;
 
@@ -127,6 +141,9 @@ app.post('/play', async (req, res) => {
     }
 
     let message;
+    if (!user || user.balance < bet) {
+        return res.status(400).json({ message: "Not enough money" });
+    }
     if (choice === resultColor) {
         if (resultColor === "zero") {
             user.balance += Number(bet) * 36;

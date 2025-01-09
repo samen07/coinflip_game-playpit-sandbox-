@@ -10,7 +10,7 @@
 <body>
 <div class="form-container" data-testid="form-container">
     <h1 data-testid="title">Coin Flip Game</h1>
-    <h2 data-testid="subtitle">Login or Register:</h2>
+    <h2 data-testid="subtitle">Login or Register</h2>
     <form id="auth-form" data-testid="auth-form">
         <label for="email" data-testid="email-label">Email:</label>
         <input type="email" id="email" placeholder="example@email.com" required data-testid="email-input">
@@ -33,13 +33,14 @@
 </div>
 
 <script>
+    const backendUrl = 'http://localhost:5000';
     // User register
     async function register() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
         try {
-            const res = await fetch('http://localhost:5000/register', {
+            const res = await fetch(backendUrl + '/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -62,7 +63,7 @@
         const password = document.getElementById('password').value;
 
         try {
-            const res = await fetch('http://localhost:5000/login', {
+            const res = await fetch(backendUrl+ '/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
