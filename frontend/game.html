@@ -13,7 +13,7 @@
 
     <div class="balance-container" data-testid="balance-container">
         <h3>Your balance: <span id="balance" data-testid="balance">0</span> $</h3>
-        <button type="button" class="add-money-btn" data-testid="add-money-btn" onclick="addMoney()">Add money</button>
+        <button type="button" class="add-money-btn" data-testid="add-money-btn" onclick="goAddMoneyPage()">Add money</button>
     </div>
 
     <form id="bet-form" data-testid="bet-form">
@@ -52,132 +52,7 @@
     <h3 id="alert-message" data-testid="alert-message">Alert MSG</h3>
     <button data-testid="close-alert-btn" onclick="closeCustomAlert()">Close</button>
 </div>
-
-<script>
-    const backendUrl = 'http://localhost:5000';
-    let userEmail = localStorage.getItem('userEmail'); // Get user email from localStorage
-
-    // Get balance
-    async function getBalance() {
-        const token = localStorage.getItem('token'); // Save token after login to localStorage
-        if (!token) {
-            showCustomAlert('You are not logged in!');
-            window.location.href = 'index.html';
-            return;
-        }
-
-        try {
-            const res = await fetch(backendUrl + '/balance', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            const data = await res.json();
-            if (res.ok) {
-                document.getElementById('balance').innerText = `${data.balance}`;
-            } else {
-                throw new Error(data.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            showCustomAlert('Get balance flow error');
-        }
-    }
-
-    // Play the game
-    async function playGame() {
-        const betAmount = document.getElementById('bet-amount').value;
-        const colorChoice = document.getElementById('color-choice').value;
-
-        if (betAmount > 0 && colorChoice != 'unselected') {
-            try {
-                const res = await fetch(backendUrl + '/play', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify({ bet: betAmount, choice: colorChoice })
-                });
-
-                const data = await res.json();
-                showCustomAlert(data.message);
-                getBalance();
-            } catch (error) {
-                console.error('Error:', error);
-                showCustomAlert('Game error!');
-            }
-        } else {
-            showCustomAlert('Please, enter right bet amount and colour choice');
-        }
-    }
-
-    // Exit game
-    async function exitGame() {
-        try {
-            const res = await fetch(backendUrl + '/logout', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (res.ok) {
-                // Remove token
-                localStorage.removeItem('token');
-                window.location.href = 'index.html';
-            } else {
-                const data = await res.json();
-                showCustomAlert(data.error || 'Logout error');
-            }
-        } catch (error) {
-            console.error('Exit error:', error);
-            showCustomAlert('Exit fail. Close browser.');
-        }
-    }
-
-    function showCustomAlert(message) {
-        const alertMessage = document.getElementById('alert-message');
-        const alertOverlay = document.getElementById('alert-overlay');
-        const customAlert = document.getElementById('custom-alert');
-
-        alertMessage.textContent = message;
-        alertOverlay.style.display = 'block';
-        customAlert.style.display = 'block';
-    }
-
-    function closeCustomAlert() {
-        const alertOverlay = document.getElementById('alert-overlay');
-        const customAlert = document.getElementById('custom-alert');
-
-        alertOverlay.style.display = 'none';
-        customAlert.style.display = 'none';
-    }
-
-    // Get balance on page load
-    window.onload = getBalance;
-
-    function selectColor(choice) {
-        // Change active style for all choices
-        document.querySelectorAll('.color-option').forEach(option => {
-            option.classList.remove('active');
-        });
-
-        // Add active style to selected option
-        const selectedOption = document.querySelector(`.color-option[data-choice="${choice}"]`);
-        selectedOption.classList.add('active');
-
-        // Save hidden choice
-        document.getElementById('color-choice').value = choice;
-    }
-
-    function addMoney() {
-        window.location.href = 'add-money.html';
-    }
-
-</script>
+<script src="scripts.js"></script>
+<script>window.onload = getBalance;</script>
 </body>
 </html>

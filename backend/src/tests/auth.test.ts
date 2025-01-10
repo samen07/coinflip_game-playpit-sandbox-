@@ -1,12 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { MongoClient } from 'mongodb';
+import * as testUtils from "./utils";
+import config from "./config";
 
-const BASE_URL = 'http://localhost:5000';
-const MONGO_URI = 'mongodb://localhost:27017';
-const DATABASE_NAME = 'coinflip_game';
-const DB_COLLECTION_NAME = 'users';
+const BASE_URL : string = config.BASE_URL;
+const MONGO_URI : string = config.MONGO_URI;
+const DATABASE_NAME: string = config.DATABASE_NAME;
+const DB_COLLECTION_NAME : string = config.DB_COLLECTION_NAME;
 
-const testUserEmail = 'test@test.com';
+const authData = testUtils.getAuthData();
 
 test.describe('Authorization Tests', () => {
   let mongoClient: MongoClient;
@@ -17,17 +19,18 @@ test.describe('Authorization Tests', () => {
     const db = mongoClient.db(DATABASE_NAME);
     const usersCollection = db.collection(DB_COLLECTION_NAME);
 
-    await usersCollection.deleteOne({ email: testUserEmail }); // Preconditions
+    await usersCollection.deleteOne({ email: authData.email }); // Preconditions
   });
 
   test.afterAll(async () => {
     await mongoClient.close();
   });
 
-  test('001 Should register a new user successfully', async ({ request }) => {
+  test('001 Should register a new user successfully',
+       async ({ request }) => {
     const response = await request.post(`${BASE_URL}/register`, {
       data: {
-        email: testUserEmail,
+        email: authData.email,
         password: 'password123',
       },
     });
@@ -40,8 +43,8 @@ test.describe('Authorization Tests', () => {
   test('002 Should login successfully and return a token', async ({ request }) => {
     const response = await request.post(`${BASE_URL}/login`, {
       data: {
-        email: testUserEmail,
-        password: 'password123',
+        email: authData.email,
+        password: authData.password,
       },
     });
 
@@ -53,8 +56,8 @@ test.describe('Authorization Tests', () => {
   test('003 Should fail login with incorrect password', async ({ request }) => {
     const response = await request.post(`${BASE_URL}/login`, {
       data: {
-        email: testUserEmail,
-        password: 'wrongpassword',
+        email: authData.email,
+        password: authData.wrongpassword,
       },
     });
 
@@ -92,7 +95,7 @@ test.describe('Authorization Tests', () => {
   test('006 Should fail with empty password field', async ({ request }) => {
     const response = await request.post(`${BASE_URL}/login`, {
       data: {
-        email: testUserEmail,
+        email: authData.email,
         password: '',
       },
     });

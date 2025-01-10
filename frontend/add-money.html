@@ -24,7 +24,7 @@
 
         <div class="btn-group">
             <button type="button" onclick="addMoney()">Add</button>
-            <button type="button" onclick="goBack()">Exit</button>
+            <button type="button" onclick="goGamePage()">Exit</button>
         </div>
     </form>
 
@@ -35,57 +35,6 @@
     </div>
 </div>
 
-<script>
-    const backendUrl = 'http://localhost:5000';
-    async function addMoney() {
-        const amount = document.getElementById('amount').value;
-        if (amount > 0) {
-            try {
-                const res = await fetch(backendUrl + '/add-money', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify({ amount: amount })
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    showCustomAlert(data.message || 'Money added successfully!');
-                } else {
-                    const errorData = await res.json();
-                    showCustomAlert(errorData.error || 'Error appears!');
-                }
-            } catch (error) {
-                showCustomAlert('Server error, try later:' + error);
-            }
-        } else {
-            showCustomAlert('Enter valid amount.');
-        }
-    }
-
-    function goBack() {
-        window.location.href = 'game.html';
-    }
-
-    function closeCustomAlert() {
-        const alertOverlay = document.getElementById('alert-overlay');
-        const customAlert = document.getElementById('custom-alert');
-
-        alertOverlay.style.display = 'none';
-        customAlert.style.display = 'none';
-    }
-
-    function showCustomAlert(message) {
-        const alertMessage = document.getElementById('alert-message');
-        const alertOverlay = document.getElementById('alert-overlay');
-        const customAlert = document.getElementById('custom-alert');
-
-        alertMessage.textContent = message;
-        alertOverlay.style.display = 'block';
-        customAlert.style.display = 'block';
-    }
-</script>
+<script src="scripts.js"></script>
 </body>
 </html>
