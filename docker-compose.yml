@@ -39,8 +39,20 @@ services:
     networks:
       - app_network
 
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: coinflip_game-jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - app_network
+
 networks:
   app_network:
 
 volumes:
   mongodb_data:
+  jenkins_home:

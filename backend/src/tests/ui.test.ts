@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { IndexPage } from '../pages/index.page';
 
-const TEST_ENV = 'http://localhost:8080';
+const TEST_ENV = 'http://localhost:3000';
 
 
 test.describe('Index.html Accessibility Test', () => {
