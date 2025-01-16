@@ -17,3 +17,5 @@ test.describe('Index.html Accessibility Test', () => {
         expect(screenshot).toMatchSnapshot('login-page.png'); // Reference screenshot
     });
 });
+
+//make login, BUG search press Login button not dirrect but create Collection of buttons and press button where text is "Login"
