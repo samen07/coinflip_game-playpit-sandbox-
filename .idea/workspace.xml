@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2894bae9-5c87-4457-b4c4-6067b5c217e3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/pages/game.page.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/pages/generic.page.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/pages/index.page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/pages/index.page.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/tests/auth.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/tests/auth.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/tests/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test_config.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/tests/ui.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/tests/ui.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/tests/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/tests/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/tests/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test-results/.last-run.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test-results/.last-run.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,32 +42,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Jest.Authorization Tests.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.Authorization Tests.should fail login with incorrect password.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.Authorization Tests.should fail with empty password field.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.server.js.executor&quot;: &quot;Run&quot;,
-    &quot;Playwright.Authorization Tests.001 Should register a new user successfully.executor&quot;: &quot;Run&quot;,
-    &quot;Playwright.Authorization Tests.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/JenkinsSetup&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/asyab/OneDrive/Documents/GitHub/coinflip_game&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs.jest.jest_package&quot;: &quot;C:/Users/asyab/OneDrive/Documents/GitHub/coinflip_game/node_modules/jest&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\asyab\\OneDrive\\Documents\\GitHub\\coinflip_game\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Jest.Authorization Tests.executor": "Run",
+    "Jest.Authorization Tests.should fail login with incorrect password.executor": "Run",
+    "Jest.Authorization Tests.should fail with empty password field.executor": "Run",
+    "Node.js.server.js.executor": "Run",
+    "Playwright.Authorization Tests.001 Should register a new user successfully.executor": "Run",
+    "Playwright.Authorization Tests.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "automation/extend__tests__001",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/asyab/OneDrive/Documents/GitHub/coinflip_game/backend/src/pages",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "C:/Users/asyab/OneDrive/Documents/GitHub/coinflip_game/node_modules/jest",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\asyab\\OneDrive\\Documents\\GitHub\\coinflip_game\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\asyab\OneDrive\Documents\GitHub\coinflip_game\backend\src\pages" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\asyab\OneDrive\Documents\GitHub\coinflip_game\backend\src" />
       <recent name="C:\Users\asyab\OneDrive\Documents\GitHub\coinflip_game\backend" />
       <recent name="C:\Users\asyab\OneDrive\Documents\GitHub\coinflip_game\frontend" />
       <recent name="C:\Users\asyab\OneDrive\Documents\GitHub\coinflip_game\autotests" />
@@ -198,6 +208,7 @@
       <workItem from="1736704352552" duration="7000" />
       <workItem from="1736776689382" duration="2372000" />
       <workItem from="1737034676804" duration="804000" />
+      <workItem from="1737040758442" duration="18509000" />
     </task>
     <servers />
   </component>

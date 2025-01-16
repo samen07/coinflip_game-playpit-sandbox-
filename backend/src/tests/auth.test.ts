@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { MongoClient } from 'mongodb';
-import * as testUtils from "./utils";
-import config from "./config";
+import * as testUtils from "../utils";
+import config from "../test_config";
 
-const BASE_URL : string = config.BASE_URL;
+const BASE_URL : string = config.BASE_BACKEND_ENDPOINT_URL;
 const MONGO_URI : string = config.MONGO_URI;
 const DATABASE_NAME: string = config.DATABASE_NAME;
 const DB_COLLECTION_NAME : string = config.DB_COLLECTION_NAME;
