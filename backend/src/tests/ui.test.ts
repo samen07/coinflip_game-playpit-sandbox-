@@ -1,21 +1,44 @@
 import { test, expect } from '@playwright/test';
-import { IndexPage } from '../pages/index.page';
-
-const TEST_ENV = 'http://localhost:3000';
-
+import { openLoginPage } from '../utils';
+import * as testUtils from "../utils";
 
 test.describe('Index.html Accessibility Test', () => {
     test('007 should verify that index looks as expected', async ({ page }) => {
-        await page.goto(TEST_ENV + '/index.html');
-        const indexPage = new IndexPage(page);
-        const isLoaded = await indexPage.isIndexPageLoaded();
+        const indexPage = await openLoginPage(page);
 
-        expect(isLoaded).toBe(true);
+        await indexPage.compareScreenshot('login-page.png');
+    });
 
-        const screenshot = await page.screenshot();
+    test('008 Login Alert with empty credentials should looks as expected', async ({ page }) => {
+        const indexPage = await openLoginPage(page);
+        await indexPage.pressLoginButton();
 
-        expect(screenshot).toMatchSnapshot('login-page.png'); // Reference screenshot
+        expect(indexPage.isAlertShown()).toBeTruthy();
+        expect(await indexPage.getAlertText()).toBe("Wrong email or password.");
+        expect(await indexPage.getAlertCloseButtonText()).toBe("Close");
+    });
+
+    test('009 Register Alert with empty credentials should looks as expected', async ({ page }) => {
+        const indexPage = await openLoginPage(page);
+        await indexPage.pressRegisterButton();
+
+        expect(indexPage.isAlertShown()).toBeTruthy();
+        expect(await indexPage.getAlertText()).toBe("Email and Password are required");
+        expect(await indexPage.getAlertCloseButtonText()).toBe("Close");
+    });
+
+    test('010 Register Alert if User existed should looks as expected', async ({ page }) => {
+        const authData = testUtils.getAuthData();
+        const indexPage = await openLoginPage(page);
+        await indexPage.registerUser(authData.email, authData.password);
+
+        expect(await indexPage.getAlertText()).toBe("Register error.");
+    });
+
+    test('011 Register Alert on register should looks as expected', async ({ page }) => {
+        const indexPage = await openLoginPage(page);
+        await indexPage.registerUser("new_test_usr@gmail.com", "password");
+
+        expect(await indexPage.getAlertText()).toBe("User registered, you can Login now!");
     });
 });
-
-//make login, BUG search press Login button not dirrect but create Collection of buttons and press button where text is "Login"
