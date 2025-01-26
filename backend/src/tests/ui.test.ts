@@ -3,6 +3,8 @@ import { openLoginPage } from '../utils';
 import * as testUtils from "../utils";
 
 test.describe('Index.html Accessibility Test', () => {
+    const authData = testUtils.getAuthData();
+
     test('007 should verify that index looks as expected', async ({ page }) => {
         const indexPage = await openLoginPage(page);
 
@@ -28,7 +30,6 @@ test.describe('Index.html Accessibility Test', () => {
     });
 
     test('010 Register Alert if User existed should looks as expected', async ({ page }) => {
-        const authData = testUtils.getAuthData();
         const indexPage = await openLoginPage(page);
         await indexPage.registerUser(authData.email, authData.password);
 
@@ -37,7 +38,7 @@ test.describe('Index.html Accessibility Test', () => {
 
     test('011 Register Alert on register should looks as expected', async ({ page }) => {
         const indexPage = await openLoginPage(page);
-        await indexPage.registerUser("new_test_usr@gmail.com", "password");
+        await indexPage.registerUser(authData.reg_new_test_usr, "password");
 
         expect(await indexPage.getAlertText()).toBe("User registered, you can Login now!");
     });

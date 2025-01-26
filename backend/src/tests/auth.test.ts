@@ -20,6 +20,7 @@ test.describe('Authorization Tests', () => {
     const usersCollection = db.collection(DB_COLLECTION_NAME);
 
     await usersCollection.deleteOne({ email: authData.email }); // Preconditions
+    await usersCollection.deleteOne({ email: authData.reg_new_test_usr }); // Preconditions
   });
 
   test.afterAll(async () => {

@@ -13,6 +13,7 @@ export function getAuthData(){
         email: authData.email as string,
         password: authData.password as string,
         wrongpassword: authData.wrongpassword as string,
+        reg_new_test_usr: authData.reg_new_test_usr as string,
     };
 }
 
