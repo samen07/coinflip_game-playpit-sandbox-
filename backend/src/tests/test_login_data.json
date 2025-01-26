@@ -1,5 +1,6 @@
 {
   "email": "test@test.com",
   "password": "password123",
-  "wrongpassword": "wrongpassword"
+  "wrongpassword": "wrongpassword",
+  "reg_new_test_usr": "reg_new_test_usr@gmail.com"
 }
