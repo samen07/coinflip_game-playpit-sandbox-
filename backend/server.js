@@ -119,8 +119,6 @@ app.get('/balance', async (req, res) => {
     res.json({ balance: user.balance });
 });
 
-// Add to user balance
-// Withdraw from user balance
 // Game
 app.post('/play', async (req, res) => {
     const token = req.headers['authorization'].split(' ')[1];
