@@ -1,4 +1,47 @@
 const backendUrl = 'http://localhost:5000';
+
+const numbers = [...Array(37).keys()];
+const colors = numbers.map(n => n === 0 ? "green" : ([2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35].includes(n) ? "black" : "red"));
+
+let angle = 0;
+let spinVelocity = 0;
+let isSpinning = false;
+let targetNumber = null;
+
+
+window.onload = function () {
+    const page = document.body.getAttribute("data-page");
+
+    if (page === "game") {
+        initGamePage();
+    } else {
+        initIndexPage();
+    }
+};
+
+const canvas = document.getElementById("rouletteCanvas");
+let ctx = null;
+if (canvas) {
+    ctx = canvas.getContext("2d");
+    drawRoulette();
+}
+
+function initIndexPage() {
+    console.log("Login page loaded");
+}
+
+function initGamePage() {
+    console.log("Game page loaded");
+
+    const canvas = document.getElementById("rouletteCanvas");
+    if (canvas) {
+        ctx = canvas.getContext("2d");
+        drawRoulette();
+    }
+
+    getBalance();
+}
+
 // User register
 async function register() {
     const email = document.getElementById('email').value;
@@ -25,6 +68,72 @@ async function register() {
         //alert('Login error!');
         showCustomAlert('Login error!');
     }
+}
+
+function drawRoulette() {
+    if (!ctx || !canvas) return;
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 150;
+    const sliceAngle = (2 * Math.PI) / numbers.length;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < numbers.length; i++) {
+        const startAngle = angle + i * sliceAngle;
+        const endAngle = startAngle + sliceAngle;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "white";
+        ctx.font = "16px Arial";
+        ctx.fillText(numbers[i], centerX + Math.cos(startAngle + sliceAngle / 2) * (radius - 20), centerY + Math.sin(startAngle + sliceAngle / 2) * (radius - 20));
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY - radius - 10);
+    ctx.lineTo(centerX - 10, centerY - radius - 20);
+    ctx.lineTo(centerX + 10, centerY - radius - 20);
+    ctx.fillStyle = "gold";
+    ctx.fill();
+}
+
+if (canvas) {
+    drawRoulette();
+}
+
+function startRouletteAnimation(resultNumber) {
+    if (isSpinning) return;
+    isSpinning = true;
+    targetNumber = resultNumber;
+    spinVelocity = Math.random() * 20 + 20;
+    animateSpin();
+}
+
+function animateSpin() {
+    if (spinVelocity > 0.01) {
+        angle += spinVelocity * 0.02;
+        spinVelocity *= 0.98;
+        requestAnimationFrame(animateSpin);
+    } else {
+        isSpinning = false;
+        stopOnNumber(targetNumber);
+    }
+    drawRoulette();
+}
+
+function stopOnNumber(targetNumber) {
+    const sliceAngle = (2 * Math.PI) / numbers.length;
+    const targetIndex = numbers.indexOf(targetNumber);
+    const targetAngle = -targetIndex * sliceAngle;
+    const correctionAngle = (angle % (2 * Math.PI)) - targetAngle;
+    angle -= correctionAngle;
+    drawRoulette();
+    showCustomAlert(`Roulette stopped on ${targetNumber} (${colors[targetIndex]})`);
 }
 
 // User login
@@ -114,7 +223,7 @@ async function playGame() {
     const betAmount = document.getElementById('bet-amount').value;
     const colorChoice = document.getElementById('color-choice').value;
 
-    if (betAmount > 0 && colorChoice != 'unselected') {
+    if (betAmount > 0 && colorChoice !== 'unselected') {
         try {
             const res = await fetch(backendUrl + '/play', {
                 method: 'POST',
@@ -122,21 +231,20 @@ async function playGame() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify({
-                    bet: betAmount,
-                    choice: colorChoice
-                })
+                body: JSON.stringify({ bet: betAmount, choice: colorChoice })
             });
 
             const data = await res.json();
-            showCustomAlert(data.message);
+            if (res.ok) {
+                startRouletteAnimation(parseInt(data.message.match(/\d+/)[0])); // Витягуємо число з повідомлення
+            }
             getBalance();
         } catch (error) {
             console.error('Error:', error);
             showCustomAlert('Game error!');
         }
     } else {
-        showCustomAlert('Please, enter right bet amount and colour choice');
+        showCustomAlert('Please, enter a valid bet and color choice.');
     }
 }
 
