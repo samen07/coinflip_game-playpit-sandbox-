@@ -8,6 +8,18 @@ let spinVelocity = 0;
 let isSpinning = false;
 let targetNumber = null;
 
+// Roulette settings
+const rouletteSettings = {
+    centerX: 200, // Canvas width / 2
+    centerY: 200, // Canvas height / 2
+    radius: 150,
+    segmentAngle: (2 * Math.PI) / numbers.length,
+    textColor: "white",
+    font: "16px Arial",
+    spinDecelerationRate: 0.98,
+    baseSpinVelocity: 20,
+    arrowColor: "gold",
+};
 
 window.onload = function () {
     const page = document.body.getAttribute("data-page");
@@ -23,6 +35,9 @@ const canvas = document.getElementById("rouletteCanvas");
 let ctx = null;
 if (canvas) {
     ctx = canvas.getContext("2d");
+    // Set canvas dimensions based on rouletteSettings
+    canvas.width = rouletteSettings.centerX * 2;
+    canvas.height = rouletteSettings.centerY * 2;
     drawRoulette();
 }
 
@@ -36,6 +51,9 @@ function initGamePage() {
     const canvas = document.getElementById("rouletteCanvas");
     if (canvas) {
         ctx = canvas.getContext("2d");
+        // Set canvas dimensions based on rouletteSettings
+        canvas.width = rouletteSettings.centerX * 2;
+        canvas.height = rouletteSettings.centerY * 2;
         drawRoulette();
     }
 
@@ -73,32 +91,43 @@ async function register() {
 function drawRoulette() {
     if (!ctx || !canvas) return;
 
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = 150;
-    const sliceAngle = (2 * Math.PI) / numbers.length;
+    const { centerX, centerY, radius, segmentAngle, textColor, font } = rouletteSettings;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (let i = 0; i < numbers.length; i++) {
-        const startAngle = angle + i * sliceAngle;
-        const endAngle = startAngle + sliceAngle;
+        const startAngle = angle + i * segmentAngle;
+        const endAngle = startAngle + segmentAngle;
+
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
         ctx.fillStyle = colors[i];
         ctx.fill();
         ctx.stroke();
-        ctx.fillStyle = "white";
-        ctx.font = "16px Arial";
-        ctx.fillText(numbers[i], centerX + Math.cos(startAngle + sliceAngle / 2) * (radius - 20), centerY + Math.sin(startAngle + sliceAngle / 2) * (radius - 20));
+
+        ctx.fillStyle = textColor;
+        ctx.font = font;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.save(); // Save the current transformation matrix
+        ctx.translate(centerX + Math.cos(startAngle + segmentAngle / 2) * (radius * 0.7), centerY + Math.sin(startAngle + segmentAngle / 2) * (radius * 0.7));
+        ctx.rotate(startAngle + segmentAngle / 2 + Math.PI / 2); // Rotate the text
+        ctx.fillText(numbers[i], 0, 0); // Draw text at the translated origin
+        ctx.restore(); // Restore the transformation matrix
     }
+
+    drawArrow();
+}
+
+function drawArrow() {
+    const { centerX, centerY, radius, arrowColor } = rouletteSettings;
 
     ctx.beginPath();
     ctx.moveTo(centerX, centerY - radius - 10);
     ctx.lineTo(centerX - 10, centerY - radius - 20);
     ctx.lineTo(centerX + 10, centerY - radius - 20);
-    ctx.fillStyle = "gold";
+    ctx.fillStyle = arrowColor;
     ctx.fill();
 }
 
@@ -110,14 +139,14 @@ function startRouletteAnimation(resultNumber) {
     if (isSpinning) return;
     isSpinning = true;
     targetNumber = resultNumber;
-    spinVelocity = Math.random() * 20 + 20;
+    spinVelocity = Math.random() * rouletteSettings.baseSpinVelocity / 2 + rouletteSettings.baseSpinVelocity;
     animateSpin();
 }
 
 function animateSpin() {
     if (spinVelocity > 0.01) {
         angle += spinVelocity * 0.02;
-        spinVelocity *= 0.98;
+        spinVelocity *= rouletteSettings.spinDecelerationRate;
         requestAnimationFrame(animateSpin);
     } else {
         isSpinning = false;
